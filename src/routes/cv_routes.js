@@ -32,14 +32,14 @@ router.get("/cv", (req, res) => {
             if (err) {
                 res.status(500).send(err);
             }
-            res.status(200).json(cv);
+            res.status(200).send({ data: cv});
         })
     } else {
         cvSchema.find({}, (err, cv) => {
             if (err) {
                 res.status(500).send(err);
             }
-            res.status(200).json(cv);
+            res.status(200).send({ data: cv});
         })
     }
 
@@ -55,7 +55,7 @@ router.get("/cv/:sort/:by", (req, res) => {
                     if (err) {
                         res.status(500).send(err);
                     }
-                    res.status(200).json(cv);
+                    res.status(200).send({ data: cv});
                 })
                 break;
             case "profession":
@@ -63,7 +63,7 @@ router.get("/cv/:sort/:by", (req, res) => {
                     if (err) {
                         res.status(500).send(err);
                     }
-                    res.status(200).json(cv);
+                    res.status(200).send({ data: cv});
                 })
                 break;
             case "available":
@@ -71,7 +71,7 @@ router.get("/cv/:sort/:by", (req, res) => {
                     if (err) {
                         res.status(500).send(err);
                     }
-                    res.status(200).json(cv);
+                    res.status(200).send({ data: cv});
                 })
                 break;
         }
@@ -80,7 +80,7 @@ router.get("/cv/:sort/:by", (req, res) => {
             if (err) {
                 res.status(500).send(err);
             }
-            res.status(200).json(cv);
+            res.status(200).send({ data: cv});
         })
     }
 
