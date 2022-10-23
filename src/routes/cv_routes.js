@@ -28,14 +28,14 @@ router.get("/cv", (req, res) => {
     const sort = req.params.sort
     const by = req.params.by
     if(sort != null && by != null){
-        cvSchema.find({}).sort({ sort : by }).exec((err, cv) => {
+        cvSchema.find({}).populate("assigned_company").sort({ sort : by }).exec((err, cv) => {
             if (err) {
                 res.status(500).send(err);
             }
             res.status(200).send({ data: cv});
         })
     } else {
-        cvSchema.find({}, (err, cv) => {
+        cvSchema.find({}).populate("assigned_company").exec((err, cv) => {
             if (err) {
                 res.status(500).send(err);
             }

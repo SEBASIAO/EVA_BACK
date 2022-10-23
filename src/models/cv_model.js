@@ -66,6 +66,11 @@ const CurriculumVitae = new Schema({
     additional_info : {
         type:String,
         required:false
+    },
+    assigned_company : {
+        type : Schema.Types.ObjectId,
+        required : false,
+        ref : "Company"
     }
 })
 
