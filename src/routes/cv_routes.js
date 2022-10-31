@@ -6,20 +6,50 @@ const router = express.Router()
 
 //create user
 router.post("/cv", (req, res) => {
-    cvSchema.findOne({ doc_number: req.body.doc_number }, (err, cv) => {
+    companySchema.findOne({ nit: req.body.company_nit }, (err, company) => {
         if (err) {
             res.status(500).send(err);
         } else {
-            if (cv != null) {
-                res.status(409).send({ message : "Doc number already exists"})
-            } else {
-                const newCv = cvSchema(req.body);
-                newCv.save((err, cv) => {
+            if (company != null) {
+                req.body.assigned_company = company._id
+                cvSchema.findOne({ doc_number: req.body.doc_number }, (err, cv) => {
                     if (err) {
                         res.status(500).send(err);
+                    } else {
+                        if (cv != null) {
+                            res.status(409).send({ message : "Doc number already exists"})
+                        } else {
+                            const newCv = cvSchema(req.body);
+                            newCv.save((err, cv) => {
+                                if (err) {
+                                    res.status(500).send(err);
+                                }
+                                res.status(201).json(cv);
+                            });
+                        }
                     }
-                    res.status(201).json(cv);
-                });
+                })
+            } else {
+                if(req.body.company_nit == "" || req.body.company_nit == null) {
+                    req.body.assigned_company = null
+                }
+                cvSchema.findOne({ doc_number: req.body.doc_number }, (err, cv) => {
+                    if (err) {
+                        res.status(500).send(err);
+                    } else {
+                        if (cv != null) {
+                            res.status(409).send({ message : "Doc number already exists"})
+                        } else {
+                            const newCv = cvSchema(req.body);
+                            newCv.save((err, cv) => {
+                                if (err) {
+                                    res.status(500).send(err);
+                                }
+                                res.status(201).json(cv);
+                            });
+                        }
+                    }
+                })
             }
         }
     })
