@@ -62,7 +62,7 @@ router.put("/company/:id", (req, res) => {
         if(!cv) {
             res.status(404).send({ message : "Company not found" })
         } else {
-            res.status(200).send({ message : "Company deleted" })
+            res.status(200).send({ message : "Company updated" })
         }
     }).catch( err => {
         res.status(500).send(err);

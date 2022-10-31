@@ -39,6 +39,9 @@ router.get("/cv", (req, res) => {
             if (err) {
                 res.status(500).send(err);
             }
+            cv.forEach( (item) => {
+                if(item.assigned_company != null) item.available = false
+            })
             res.status(200).send({ data: cv});
         })
     }
