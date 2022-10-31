@@ -17,7 +17,7 @@ const User = new Schema({
     admin : {
         type:Boolean,
         required:true,
-        default : true
+        default : false
     }
 })
 
