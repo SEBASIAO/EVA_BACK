@@ -70,6 +70,7 @@ const CurriculumVitae = new Schema({
     assigned_company : {
         type : Schema.Types.ObjectId,
         required : false,
+        default : null,
         ref : "Company"
     }
 })
