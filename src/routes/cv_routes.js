@@ -1,5 +1,6 @@
 const  express = require("express");
 const cvSchema = require("../models/cv_model")
+const companySchema = require("../models/company_model")
 
 const router = express.Router()
 
@@ -40,7 +41,9 @@ router.get("/cv", (req, res) => {
                 res.status(500).send(err);
             }
             cv.forEach( (item) => {
-                if(item.assigned_company != null) item.available = false
+                if(item.assigned_company != null){
+                    item.available = false
+                } else item.available = true
             })
             res.status(200).send({ data: cv});
         })
@@ -102,15 +105,40 @@ router.delete("/cv/:id", (req, res) => {
 })
 
 router.put("/cv/:id", (req, res) => {
-    cvSchema.findByIdAndUpdate(req.params.id, req.body).then( cv => {
-        if(!cv) {
-            res.status(404).send({ message : "CV not found" })
+    companySchema.findOne({ nit: req.body.company_nit }, (err, company) => {
+        if (err) {
+            res.status(500).send(err);
         } else {
-            res.status(200).send({ message : "CV updated" })
+            if (company != null) {
+                console.log("company id:",company._id)
+                req.body.assigned_company = company._id
+                console.log(req.body)
+                cvSchema.findByIdAndUpdate(req.params.id, req.body).then( cv => {
+                    if(!cv) {
+                        res.status(404).send({ message : "CV not found" })
+                    } else {
+                        res.status(200).send({ message : "CV updated" })
+                    }
+                }).catch( err => {
+                    res.status(500).send(err);
+                })
+            } else {
+                if(req.body.company_nit == "" || req.body.company_nit == null) {
+                    req.body.assigned_company = null
+                }
+                cvSchema.findByIdAndUpdate(req.params.id, req.body).then( cv => {
+                    if(!cv) {
+                        res.status(404).send({ message : "CV not found" })
+                    } else {
+                        res.status(200).send({ message : "CV updated" })
+                    }
+                }).catch( err => {
+                    res.status(500).send(err);
+                })
+            }
         }
-    }).catch( err => {
-        res.status(500).send(err);
     })
+    
 })
 
 module.exports = router;
